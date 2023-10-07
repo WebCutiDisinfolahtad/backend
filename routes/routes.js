@@ -7,7 +7,6 @@ const { Validation } = require("../validators");
 
 router.route('/register').post(Validation.register, controller.register)
 
-
 router.route('/login').post(Validation.login, controller.login)
 
 
