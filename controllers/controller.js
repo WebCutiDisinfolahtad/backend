@@ -44,6 +44,19 @@ const personel = async (req, res) => {
     }
 }
 
+const personelbynopers = async (req, res) => {
+    try{
+        const {nopers} = req.body
+        const result = await Services.personelbynopers(nopers);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
 const option_user = async (req, res) => {
     try{
         const result = await Services.option_user();
@@ -69,11 +82,40 @@ const user = async (req, res) => {
     }
 }
 
+const option_personel = async (req, res) => {
+    try{
+        const result = await Services.option_personel();
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+const daftarinpersonel = async (req, res, next) => {
+    try {
+        const { nopers, nm_user,gelardpn, gelarblk, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir} = req.body;
+        const result = await Services.daftarinpersonel( nopers, nm_user,gelardpn, gelarblk , kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+    
+}
 
 module.exports = {
     register,
     login,
     personel,
     option_user,
-    user
+    user,
+    personelbynopers,
+    option_personel,
+    daftarinpersonel
 }
