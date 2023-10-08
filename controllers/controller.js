@@ -31,7 +31,49 @@ const login = async (req, res) => {
     }
 }
 
+const personel = async (req, res) => {
+    try{
+        const id_user = req.verified
+        const result = await Services.personel(id_user);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+const option_user = async (req, res) => {
+    try{
+        const result = await Services.option_user();
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+const user = async (req, res) => {
+    try{
+        const id_user = req.verified
+        const result = await Services.user(id_user);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+
 module.exports = {
     register,
-    login
+    login,
+    personel,
+    option_user,
+    user
 }

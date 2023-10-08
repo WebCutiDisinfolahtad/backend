@@ -2,7 +2,8 @@ require("dotenv").config();
 const { databaseQuery } = require('../database');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Cookies = require ('../node_modules/universal-cookie')
+const Cookies = require ('../node_modules/universal-cookie');
+const { Context } = require("express-validator/src/context");
 
 const cookie = new Cookies();
 
@@ -41,7 +42,62 @@ const login = async (username,password) => {
     }
 }
 
+const personel = async (id_user) => {
+    try {
+        const query = `SELECT * FROM tabel_personel`;
+        const result = await databaseQuery(query);
+
+        return (
+            
+            result.rows
+        )
+
+    } catch (error) {
+        return error
+    }
+    
+}
+
+const option_user = async (id_user) => {
+    try {
+        const oto = `SELECT ur_oto FROM tabel_otorisasi`;
+        const ktm = `SELECT ur_ktm FROM tabel_kotama`;
+        const smkl = `SELECT ur_smkl FROM tabel_stmkl`;
+        const [result1, result2, result3] = await Promise.all([databaseQuery(oto), databaseQuery(ktm), databaseQuery(smkl)]);
+        
+        return {
+            ur_oto: result1.rows,
+            ur_ktm: result2.rows,
+            ur_smkl: result3.rows
+        }
+
+    } catch (error) {
+        return error
+    }
+    
+}
+
+const user = async (id_user) => {
+    try {
+        const query = `SELECT * FROM tabel_user`;
+        const result = await databaseQuery(query);
+
+        return (
+            
+            result.rows
+        )
+
+    } catch (error) {
+        return error
+    }
+    
+}
+
+
 module.exports = {
     register,
-    login
+    login,
+    personel,
+    option_user,
+    user
 }

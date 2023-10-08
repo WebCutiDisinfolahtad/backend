@@ -8,7 +8,7 @@ const Auth = {
             const verified = jwt.verify(token, process.env.SECRET)
             req.verified = verified.id_user
 
-            console.log(verified)
+            
 
             if(verified){
                 console.log(`Succesfully Verified`)
