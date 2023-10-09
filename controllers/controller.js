@@ -109,6 +109,62 @@ const daftarinpersonel = async (req, res, next) => {
     
 }
 
+
+const requestcuti = async (req, res, next) => {
+    try {
+        const { nopers, tahun,kd_jnscuti, tgl_mulai, tgl_akhir,transport, keperluan, alamat} = req.body;
+        const result = await Services.requestcuti( nopers, tahun,kd_jnscuti, tgl_mulai, tgl_akhir,transport, keperluan, alamat);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+    
+}
+
+const option_jnscuti = async (req, res) => {
+    try{
+        const result = await Services.option_jnscuti();
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+const disposisi = async (req, res) => {
+    try{
+        const result = await Services.disposisi();
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
+const disposisiupdate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { dis_kasi, dis_kabag, dis_kasub, dis_sesdis, ket_tolak} = req.body;
+        const result = await Services.disposisiupdate( id, dis_kasi, dis_kabag, dis_kasub, dis_sesdis, ket_tolak);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+    
+}
+
 module.exports = {
     register,
     login,
@@ -117,5 +173,9 @@ module.exports = {
     user,
     personelbynopers,
     option_personel,
-    daftarinpersonel
+    daftarinpersonel,
+    requestcuti,
+    option_jnscuti,
+    disposisi,
+    disposisiupdate,
 }

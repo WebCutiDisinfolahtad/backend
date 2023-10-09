@@ -21,4 +21,12 @@ router.route('/daftarinpersonel').post(Auth.verifyToken, controller.daftarinpers
 
 router.route('/users').get(Auth.verifyToken, controller.user)
 
+router.route('/requestcuti').post(Auth.verifyToken, controller.requestcuti)
+
+router.route('/option_jnscuti').get(controller.option_jnscuti)
+
+router.route('/disposisi').get(Auth.verifyToken, controller.disposisi)
+
+router.route('/disposisiupdate/:id').put(Auth.verifyToken, controller.disposisiupdate)
+
 module.exports = router
