@@ -42,6 +42,20 @@ const login = async (username,password) => {
     }
 }
 
+const me = async (id_user) => {
+    try {
+        const query = `SELECT * FROM tabel_user WHERE id_user=$1`;
+        const result = await databaseQuery(query, [id_user]);
+
+        return (
+            result.rows
+        )
+        
+    } catch (error) {
+        return error
+    }
+}
+
 const personel = async (id_user) => {
     try {
         const query = `SELECT
@@ -332,6 +346,7 @@ module.exports = {
     requestcuti,
     option_jnscuti,
     disposisi,
-    disposisiupdate
+    disposisiupdate,
+    me
 
 }

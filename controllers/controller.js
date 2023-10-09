@@ -31,6 +31,19 @@ const login = async (req, res) => {
     }
 }
 
+const me = async (req, res) => {
+    try{
+        const id_user = req.verified
+        const result = await Services.me(id_user);
+        if (result instanceof Error) {
+            throw new Error(result);
+        }
+        res.status(responseHelper.status.success).json(result);
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
 const personel = async (req, res) => {
     try{
         const id_user = req.verified
@@ -165,6 +178,14 @@ const disposisiupdate = async (req, res) => {
     
 }
 
+const logout = async (req, res, next) => {
+    try {
+        res.clearCookie('token').status(responseHelper.status.success).send("Berhasil Logout");
+    } catch (error) {
+        res.status(responseHelper.status.error).json(error.message);
+    }
+}
+
 module.exports = {
     register,
     login,
@@ -178,4 +199,6 @@ module.exports = {
     option_jnscuti,
     disposisi,
     disposisiupdate,
+    me,
+    logout
 }

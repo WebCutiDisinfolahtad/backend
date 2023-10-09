@@ -9,6 +9,8 @@ router.route('/register').post(Validation.register, controller.register)
 
 router.route('/login').post(Validation.login, controller.login)
 
+router.route('/me').get(Auth.verifyToken, controller.me)
+
 router.route('/personel').get(Auth.verifyToken, controller.personel)
 
 router.route('/personelbynopers').get(Auth.verifyToken, controller.personelbynopers)
@@ -28,5 +30,7 @@ router.route('/option_jnscuti').get(controller.option_jnscuti)
 router.route('/disposisi').get(Auth.verifyToken, controller.disposisi)
 
 router.route('/disposisiupdate/:id').put(Auth.verifyToken, controller.disposisiupdate)
+
+router.route('/logout').post(Auth.verifyToken, controller.logout)
 
 module.exports = router
