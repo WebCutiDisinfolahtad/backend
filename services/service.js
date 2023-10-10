@@ -7,11 +7,11 @@ const { Context } = require("express-validator/src/context");
 
 const cookie = new Cookies();
 
-const register = async (id_user, nm_user,username, password,kt_kunci, kd_oto, no_pers, kd_ktm, kd_smkl) => {
+const register = async (id_user,username, password,kd_jab, kd_oto, nopers) => {
     try {
-        const query = `INSERT INTO tabel_user VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)` ;
+        const query = `INSERT INTO tabel_user VALUES ($1, $2, $3, $4, $5, $6)` ;
         const hash = await bcrypt.hash(password,10)
-        const result = await databaseQuery(query, [id_user, nm_user, username, hash,kt_kunci, kd_oto, no_pers, kd_ktm, kd_smkl]);
+        const result = await databaseQuery(query, [id_user, username, hash,kd_jab, kd_oto, nopers]);
         if (!result){
 			throw new Error('Register Error');
 		}
@@ -44,7 +44,22 @@ const login = async (username,password) => {
 
 const me = async (id_user) => {
     try {
-        const query = `SELECT * FROM tabel_user WHERE id_user=$1`;
+        const query = `SELECT
+        tabel_user.id_user,
+        tabel_user.username,
+        tabel_otorisasi.ur_oto AS otorisasi,
+        tabel_jenis_jabatan.ur_jenis_jab AS jenis_jabatan
+            
+        FROM
+            tabel_user
+        INNER JOIN
+            tabel_otorisasi ON tabel_user.kd_oto = tabel_otorisasi.kd_oto
+        JOIN 
+        tabel_jabatan ON tabel_user.kd_jab = tabel_jabatan.kd_jab
+        JOIN
+        tabel_jenis_jabatan ON tabel_jabatan.kd_jenis_jab = tabel_jenis_jabatan.kd_jenis_jab
+        WHERE id_user=$1
+        `;
         const result = await databaseQuery(query, [id_user]);
 
         return (
@@ -61,8 +76,6 @@ const personel = async (id_user) => {
         const query = `SELECT
         tabel_personel.nopers,
         tabel_personel.nm_pers,
-        tabel_personel.gelardpn,
-        tabel_personel.gelarblk,
         tabel_pangkat.ur_pkt AS pangkat,
         tabel_korps.ur_corp AS korps,
         tabel_stmkl.ur_smkl AS stmkl,
@@ -108,8 +121,6 @@ const personelbynopers = async (nopers) => {
         const query1 = `SELECT
         tabel_personel.nopers,
         tabel_personel.nm_pers,
-        tabel_personel.gelardpn,
-        tabel_personel.gelarblk,
         tabel_pangkat.ur_pkt AS pangkat,
         tabel_korps.ur_corp AS korps,
         tabel_stmkl.ur_smkl AS stmkl,
@@ -192,7 +203,7 @@ const user = async (id_user) => {
     
 }
 
-const daftarinpersonel = async (nopers, nm_user,gelardpn, gelarblk, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir) => {
+const daftarinpersonel = async (nopers, nm_user, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir) => {
     try {
         const query = `
             WITH pangkat AS (
@@ -216,9 +227,9 @@ const daftarinpersonel = async (nopers, nm_user,gelardpn, gelarblk, kd_pkt,kd_co
             agama AS (
                 SELECT kd_agama FROM tabel_agama WHERE ur_agama=$7
             )
-            INSERT INTO tabel_personel VALUES ($8, $9, $10, $11, (SELECT kd_pkt FROM pangkat), (SELECT kd_corp FROM corp), (SELECT kd_smkl FROM smkl), (SELECT kd_ktm FROM ktm), (SELECT kd_bag FROM bag), (SELECT kd_jab FROM jab), (SELECT kd_agama FROM agama), $12, $13)
+            INSERT INTO tabel_personel VALUES ($8, $9, (SELECT kd_pkt FROM pangkat), (SELECT kd_corp FROM corp), (SELECT kd_smkl FROM smkl), (SELECT kd_ktm FROM ktm), (SELECT kd_bag FROM bag), (SELECT kd_jab FROM jab), (SELECT kd_agama FROM agama), $10, $11)
         `;
-        const result = await databaseQuery(query, [kd_pkt, kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, nopers, nm_user, gelardpn, gelarblk, telp, tgl_lahir]);
+        const result = await databaseQuery(query, [kd_pkt, kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, nopers, nm_user, telp, tgl_lahir]);
         if (!result){
 			throw new Error('Register Error');
 		}
@@ -275,7 +286,7 @@ const requestcuti = async (nopers, tahun, kd_jnscuti, tgl_mulai, tgl_akhir,trans
         WITH nomor_cuti AS(
             SELECT no_cuti FROM tabel_nomcuti WHERE nopers=$1
         )
-        INSERT INTO tabel_disposisi VALUES ((SELECT no_cuti FROM nomor_cuti), 0, 0, 0, 0, 'Proses Disposisi')` ;
+        INSERT INTO tabel_disposisi VALUES ((SELECT no_cuti FROM nomor_cuti), 0, 0, 0, 0, '0')` ;
         const result2 = await databaseQuery(query2, [nopers]);
         if (!result){
 			throw new Error('Register Error');

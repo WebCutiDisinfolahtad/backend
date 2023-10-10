@@ -5,8 +5,8 @@ const { use } = require('../routes');
 
 const register = async (req, res, next) => {
     try {
-        const { id_user, nm_user, username, password, kt_kunci, kd_oto, no_pers, kd_ktm, kd_smkl} = req.body;
-        const result = await Services.register( id_user, nm_user, username, password, kt_kunci, kd_oto, no_pers, kd_ktm, kd_smkl);
+        const { id_user, username, password, kd_jab, kd_oto, nopers} = req.body;
+        const result = await Services.register( id_user, username, password, kd_jab, kd_oto, nopers);
         if (result instanceof Error) {
             throw new Error(result);
         }
@@ -109,8 +109,8 @@ const option_personel = async (req, res) => {
 
 const daftarinpersonel = async (req, res, next) => {
     try {
-        const { nopers, nm_user,gelardpn, gelarblk, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir} = req.body;
-        const result = await Services.daftarinpersonel( nopers, nm_user,gelardpn, gelarblk , kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir);
+        const { nopers, nm_user, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir} = req.body;
+        const result = await Services.daftarinpersonel( nopers, nm_user, kd_pkt,kd_corp, kd_smkl, kd_ktm, kd_bag, kd_jab, kd_agama, telp, tgl_lahir);
         if (result instanceof Error) {
             throw new Error(result);
         }
