@@ -331,10 +331,23 @@ const disposisiupdate = async (id, dis_kasi, dis_kabag, dis_kasub, dis_sesdis, k
     try {
         const query = `UPDATE tabel_disposisi SET dis_kasi=$1, dis_kabag=$2, dis_kasub=$3, dis_sesdis=$4, ket_tolak=$5 WHERE no_cuti=$6` ;
         const result = await databaseQuery(query, [dis_kasi, dis_kabag, dis_kasub, dis_sesdis, ket_tolak, id]);
-        
         if (!result){
 			throw new Error('Register Error');
 		}
+        if (ket_tolak == 2){
+            const query2 = `UPDATE tabel_sisa_cuti
+            SET cuti_tahunan = cuti_tahunan - (
+              SELECT EXTRACT(DAY FROM AGE(tgl_akhir, tgl_mulai)) AS selisih_hari
+              FROM tabel_nomcuti
+              WHERE no_cuti = $1
+            ) 
+            WHERE no_pers IN (
+              SELECT nopers
+              FROM tabel_nomcuti
+              WHERE no_cuti = $1
+            )` ;
+            const result2 = await databaseQuery(query2, [id]);
+        }
 		return ("Update Disposisi Berhasil")
     } catch (error) {
         return error
