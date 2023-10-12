@@ -11,9 +11,9 @@ router.route('/login').post(Validation.login, controller.login)
 
 router.route('/me').get(Auth.verifyToken, controller.me)
 
-router.route('/personel').get(Auth.verifyToken, controller.personel)
+router.route('/personel').post(Auth.verifyToken, controller.personel)
 
-router.route('/personelbynopers').get(Auth.verifyToken, controller.personelbynopers)
+router.route('/personelbynopers').post(Auth.verifyToken, controller.personelbynopers)
 
 router.route('/option_user').get(controller.option_user)
 

@@ -14,7 +14,7 @@ databaseConfig.connect((err) =>{
         return;
     }
     console.log(`Database Connected`)
-});
+}); 
 
 app.use(express.json());
 app.use(bodyParser.json());
