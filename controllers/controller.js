@@ -220,7 +220,7 @@ const updatepersonel = async (req, res, next) => {
 
 const deleteuser = async (req, res, next) => {
     try {
-        const { id_user } = req.body;
+        const { id_user } = req.params;
         const result = await Services.deleteUser(id_user);
         if (result instanceof Error) {
             throw new Error(result);

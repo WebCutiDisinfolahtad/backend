@@ -38,7 +38,7 @@ router.route('/updateuser').put(Auth.verifyToken, controller.updateuser)
 
 router.route('/updatepersonel').put(Auth.verifyToken, controller.updatepersonel)
 
-router.route('/deleteuser').delete(Auth.verifyToken, controller.deleteuser)
+router.route('/deleteuser/:id_user').delete(controller.deleteuser)
 
 router.route('/getoneuser').post(Auth.verifyToken, controller.getoneuser)
 
